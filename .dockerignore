@@ -1,0 +1,7 @@
+# ignore everything
+**
+
+# allow golang directories
+!/cmd/**
+!/pkg/**
+!/vendor/**
