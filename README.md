@@ -1,6 +1,6 @@
 # bpf-kubernetes
 
-bpf-kubernetes contains a collection of POC examples of BPF programs that could be used to provide benefits to a Kubernetes cluster. A lot of inspiration came from the blog post: [Using eBPF in Kubernetes](https://kubernetes.io/blog/2017/12/using-ebpf-in-kubernetes/).
+bpf-kubernetes contains a collection of POC examples of BPF programs that could be used to provide benefits to a Kubernetes cluster operator. A lot of inspiration came from the blog post: [Using eBPF in Kubernetes](https://kubernetes.io/blog/2017/12/using-ebpf-in-kubernetes/).
 
 ## Documentation
 
