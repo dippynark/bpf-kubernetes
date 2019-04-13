@@ -1,7 +1,7 @@
-# cgroup_skb
+# cgroup_skb_metrics
 
-[cgroup_skb](../examples/main.go) does the following:
-- Loads [cgroup_skb.c](../bpf/cgroup_skb.c) containing a `BPF_MAP_TYPE_ARRAY` map (section `maps/count`) and a `BPF_PROG_TYPE_CGROUP_SKB` program (section `cgroup/skb`)
+Example cgroup_skb_metrics does the following:
+- Loads [cgroup_skb_metrics.c](../bpf/cgroup_skb_metrics.c) containing a `BPF_MAP_TYPE_ARRAY` map (section `maps/count`) and a `BPF_PROG_TYPE_CGROUP_SKB` program (section `cgroup/skb`)
 - Creates a v2 cgroup
 - Moves itself into the cgroup by writing its PID to the `cgroup.procs` file in the cgroup
 - Attaches program `cgroup/skb` to the cgroup using attach type `BPF_CGROUP_INET_EGRESS`

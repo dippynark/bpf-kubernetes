@@ -12,15 +12,16 @@ CGROUP2 = /sys/fs/cgroup/unified
 # If you can use docker without being root, you can do "make SUDO="
 SUDO=$(shell docker info >/dev/null 2>&1 || echo "sudo -E")
 
-run: build
-	docker run -it \
+run_%:
+	@docker run -it \
 		--privileged \
 		--pid=host \
 		--net=host \
 		--ipc=host \
 		--uts=host \
 		-v $(CGROUP2):$(CGROUP2) \
-		${REGISTRY}/${IMAGE}:${TAG}
+		${REGISTRY}/${IMAGE}:${TAG} \
+		--example $*
 
 build: install_bpf docker_build
 

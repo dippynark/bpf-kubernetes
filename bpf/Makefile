@@ -12,7 +12,7 @@
 
 SHELL=/bin/bash -o pipefail
 
-OBJS ?= cgroup_skb.o
+OBJS ?= cgroup_skb_metrics.o
 
 DEST_DIR ?= /dist
 

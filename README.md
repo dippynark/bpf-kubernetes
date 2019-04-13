@@ -8,7 +8,7 @@ It's recommended to read the documentation in the same order as the following li
 
 - General BPF documentation can be found in [bpf.md](docs/bpf.md)
 - Documentation specific to each example can be found below:
-  - [cgroup_skb.md](docs/cgroup_skb.md)
+  - [cgroup_skb_metrics.md](docs/cgroup_skb_metrics.md)
 
 ## Quickstart
 
@@ -20,7 +20,21 @@ $ vagrant box list | grep ubuntu/bionic64 || vagrant box add ubuntu/bionic64
 $ vagrant up
 $ vagrant ssh
 $ cd /vagrant
-$ make run
+$ make build
+$ make run_help
+Choose from the following examples:
+cgroup_skb_metrics
+$ make run_cgroup_skb_metrics
+2019/04/13 16:40:12 packet count: 0
+2019/04/13 16:40:16 pinged www.google.com
+2019/04/13 16:40:17 packet count: 3
+2019/04/13 16:40:18 curled http://www.google.com/
+2019/04/13 16:40:20 pinged www.google.com
+2019/04/13 16:40:22 packet count: 13
+2019/04/13 16:40:22 curled http://www.google.com/
+2019/04/13 16:40:26 pinged www.google.com
+2019/04/13 16:40:27 packet count: 23
+^C
 ```
 
 ## Ideas
