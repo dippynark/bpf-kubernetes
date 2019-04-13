@@ -20,7 +20,7 @@ It is of course possible to write these programs by hand but the easiest way is 
 
 ## Loading BPF programs
 
-Once we have written a BPF program we need to load it into the kernel. This is done using the [`bpf`](http://man7.org/linux/man-pages/man2/bpf.2.html) syscall. This repository makes use of the [gobpf-elf](https://github.com/iovisor/gobpf/tree/master/elf) package which provides the Go bindings for loading and interacting with BPF programs and maps stored in an ELF object file. Examples of how to use this package can be found in [cmd](../cmd).
+Once we have written a BPF program we need to load it into the kernel. This is done using the [`bpf`](http://man7.org/linux/man-pages/man2/bpf.2.html) syscall. This repository makes use of the [gobpf-elf](https://github.com/iovisor/gobpf/tree/master/elf) package which provides the Go bindings for loading and interacting with BPF programs and maps stored in and loaded from an ELF object file. Examples of how to use this package can be found in [cmd](../cmd).
 
 ## TODO
 
