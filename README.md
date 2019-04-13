@@ -39,5 +39,6 @@ $ make run_cgroup_skb_metrics
 
 ## Ideas
 
-- BPF program to prevent a kubectl exec from reaching out over the network
+- Prevent a kubectl exec session from connecting out over the network
+- Capture all kubectl exec output for auditing purpose
 - https://cilium.io/blog/2018/10/23/cilium-13-envoy-go/
