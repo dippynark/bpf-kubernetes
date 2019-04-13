@@ -4,6 +4,8 @@ bpf-kubernetes contains a collection of POC examples of BPF programs that could 
 
 ## Documentation
 
+It's recommended to read the documentation in the same order as the following list; each document assumes all knowledge from any previous documents:
+
 - General BPF documentation can be found in [bpf.md](docs/bpf.md)
 - Documentation specific to each example can be found below:
   - [cgroup_skb.md](docs/cgroup_skb.md)
