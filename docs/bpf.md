@@ -1,8 +1,8 @@
 # BPF
 
-> There are two types of BPF: cBPF and eBPF (classical and extended). Here we only discuss eBPF and refer to it just as BPF.
+> There are two types of BPF: cBPF (classical) and eBPF (extended). Here we only discuss eBPF and refer to it just as BPF.
 
-BPF is a highly efficient sandboxed virtual machine in the Linux kernel and a BPF program is a program which can be run on this virtual machine. To understand this it is important to understand that the Linux kernel is fundamentally event driven; processes do system calls, hardware sends interrupts etc. and the kernel handles these events. What BPF allows you to do is to trigger a BPF program to run on this virtual machine in response to an event. There are different types of BPF programs which determines, amongst other things, which events will trigger the program to run. BPF therefore makes the Linux kernel programmable at run time.
+BPF is a highly efficient sandboxed virtual machine in the Linux kernel and a BPF program is a program which can be run on this virtual machine. To understand this it is important to understand that the Linux kernel is fundamentally event driven; processes do system calls, hardware sends interrupts etc. and the kernel handles these events. What BPF allows you to do is to trigger a BPF program to run on this virtual machine in response to an event. There are different types of BPF programs which determines, amongst other things, which events will trigger the program to run. BPF therefore makes the Linux kernel programmable.
 
 In addition to being able to run these programs, BPF also has a concept of maps. BPF programs can read and write data to these maps which allows them to communicate with each other. BPF maps are also accessible from user space which could be used, for example, to configure the programs or retrieve useful data such as metrics.
 
