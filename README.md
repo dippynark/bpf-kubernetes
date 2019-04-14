@@ -9,6 +9,7 @@ It's recommended to read the documentation in the same order as the following li
 - General BPF documentation can be found in [bpf.md](docs/bpf.md)
 - Documentation specific to each example can be found below:
   - [cgroup_skb_metrics.md](docs/cgroup_skb_metrics.md)
+  - [exec_trace.md](docs/exec_trace.md)
 
 ## Quickstart
 
