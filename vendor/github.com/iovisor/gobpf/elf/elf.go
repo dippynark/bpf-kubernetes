@@ -550,13 +550,12 @@ func (b *Module) Load(parameters map[string]SectionParams) error {
 			isUprobe := strings.HasPrefix(secName, "uprobe/")
 			isUretprobe := strings.HasPrefix(secName, "uretprobe/")
 			isCgroupSkb := strings.HasPrefix(secName, "cgroup/skb")
-			isCgroupSockOps := strings.HasPrefix(secName, "cgroup/sock_ops/")
-			isCgroupSock := strings.HasPrefix(secName, "cgroup/sock/")
+			isCgroupSock := strings.HasPrefix(secName, "cgroup/sock")
+			isSockOps := strings.HasPrefix(secName, "sockops")
 			isSocketFilter := strings.HasPrefix(secName, "socket")
 			isTracepoint := strings.HasPrefix(secName, "tracepoint/")
 			isSchedCls := strings.HasPrefix(secName, "sched_cls/")
 			isSchedAct := strings.HasPrefix(secName, "sched_act/")
-			isSkSkb := strings.HasPrefix(secName, "sk/skb/")
 
 			var progType uint32
 			switch {
@@ -571,10 +570,10 @@ func (b *Module) Load(parameters map[string]SectionParams) error {
 				progType = uint32(C.BPF_PROG_TYPE_KPROBE)
 			case isCgroupSkb:
 				progType = uint32(C.BPF_PROG_TYPE_CGROUP_SKB)
-			case isCgroupSockOps:
-				progType = uint32(C.BPF_PROG_TYPE_SOCK_OPS)
 			case isCgroupSock:
 				progType = uint32(C.BPF_PROG_TYPE_CGROUP_SOCK)
+			case isSockOps:
+				progType = uint32(C.BPF_PROG_TYPE_SOCK_OPS)
 			case isSocketFilter:
 				progType = uint32(C.BPF_PROG_TYPE_SOCKET_FILTER)
 			case isTracepoint:
@@ -583,8 +582,6 @@ func (b *Module) Load(parameters map[string]SectionParams) error {
 				progType = uint32(C.BPF_PROG_TYPE_SCHED_CLS)
 			case isSchedAct:
 				progType = uint32(C.BPF_PROG_TYPE_SCHED_ACT)
-			case isSkSkb:
-				progType = uint32(C.BPF_PROG_TYPE_SK_SKB)
 			}
 
 			// If Kprobe or Kretprobe for a syscall, use correct syscall prefix in section name
@@ -600,7 +597,7 @@ func (b *Module) Load(parameters map[string]SectionParams) error {
 				}
 			}
 
-			if isKprobe || isKretprobe || isUprobe || isUretprobe || isCgroupSkb || isCgroupSock || isSocketFilter || isTracepoint || isSchedCls || isSchedAct || isSkSkb || isCgroupSockOps {
+			if isKprobe || isKretprobe || isUprobe || isUretprobe || isCgroupSkb || isCgroupSock || isSocketFilter || isTracepoint || isSchedCls || isSockOps {
 				rdata, err := rsection.Data()
 				if err != nil {
 					return err
@@ -646,9 +643,9 @@ func (b *Module) Load(parameters map[string]SectionParams) error {
 					}
 				case isCgroupSkb:
 					fallthrough
-				case isCgroupSockOps:
-					fallthrough
 				case isCgroupSock:
+					fallthrough
+				case isSockOps:
 					b.cgroupPrograms[secName] = &CgroupProgram{
 						Name:  secName,
 						insns: insns,
@@ -674,12 +671,6 @@ func (b *Module) Load(parameters map[string]SectionParams) error {
 						insns: insns,
 						fd:    int(progFd),
 					}
-				case isSkSkb:
-					b.skSkbPrograms[secName] = &SkSkbProgram{
-						Name:  secName,
-						insns: insns,
-						fd:    int(progFd),
-					}
 				}
 			}
 		}
@@ -697,13 +688,12 @@ func (b *Module) Load(parameters map[string]SectionParams) error {
 		isUprobe := strings.HasPrefix(secName, "uprobe/")
 		isUretprobe := strings.HasPrefix(secName, "uretprobe/")
 		isCgroupSkb := strings.HasPrefix(secName, "cgroup/skb")
-		isCgroupSockOps := strings.HasPrefix(secName, "cgroup/sock_ops/")
-		isCgroupSock := strings.HasPrefix(secName, "cgroup/sock/")
+		isCgroupSock := strings.HasPrefix(secName, "cgroup/sock")
+		isSockOps := strings.HasPrefix(secName, "sockops")
 		isSocketFilter := strings.HasPrefix(secName, "socket")
 		isTracepoint := strings.HasPrefix(secName, "tracepoint/")
 		isSchedCls := strings.HasPrefix(secName, "sched_cls/")
 		isSchedAct := strings.HasPrefix(secName, "sched_act/")
-		isSkSkb := strings.HasPrefix(secName, "sk/skb/")
 
 		var progType uint32
 		switch {
@@ -717,10 +707,10 @@ func (b *Module) Load(parameters map[string]SectionParams) error {
 			progType = uint32(C.BPF_PROG_TYPE_KPROBE)
 		case isCgroupSkb:
 			progType = uint32(C.BPF_PROG_TYPE_CGROUP_SKB)
-		case isCgroupSockOps:
-			progType = uint32(C.BPF_PROG_TYPE_SOCK_OPS)
 		case isCgroupSock:
 			progType = uint32(C.BPF_PROG_TYPE_CGROUP_SOCK)
+		case isSockOps:
+			progType = uint32(C.BPF_PROG_TYPE_SOCK_OPS)
 		case isSocketFilter:
 			progType = uint32(C.BPF_PROG_TYPE_SOCKET_FILTER)
 		case isTracepoint:
@@ -729,8 +719,6 @@ func (b *Module) Load(parameters map[string]SectionParams) error {
 			progType = uint32(C.BPF_PROG_TYPE_SCHED_CLS)
 		case isSchedAct:
 			progType = uint32(C.BPF_PROG_TYPE_SCHED_ACT)
-		case isSkSkb:
-			progType = uint32(C.BPF_PROG_TYPE_SK_SKB)
 		}
 
 		// If Kprobe or Kretprobe for a syscall, use correct syscall prefix in section name
@@ -746,7 +734,7 @@ func (b *Module) Load(parameters map[string]SectionParams) error {
 			}
 		}
 
-		if isKprobe || isKretprobe || isUprobe || isUretprobe || isCgroupSkb || isCgroupSock || isSocketFilter || isTracepoint || isSchedCls || isSchedAct || isSkSkb || isCgroupSockOps {
+		if isKprobe || isKretprobe || isUprobe || isUretprobe || isCgroupSkb || isCgroupSock || isSocketFilter || isTracepoint || isSchedCls || isSchedAct || isSockOps {
 			data, err := section.Data()
 			if err != nil {
 				return err
@@ -787,9 +775,9 @@ func (b *Module) Load(parameters map[string]SectionParams) error {
 				}
 			case isCgroupSkb:
 				fallthrough
-			case isCgroupSockOps:
-				fallthrough
 			case isCgroupSock:
+				fallthrough
+			case isSockOps:
 				b.cgroupPrograms[secName] = &CgroupProgram{
 					Name:  secName,
 					insns: insns,
@@ -811,12 +799,6 @@ func (b *Module) Load(parameters map[string]SectionParams) error {
 				fallthrough
 			case isSchedAct:
 				b.schedPrograms[secName] = &SchedProgram{
-					Name:  secName,
-					insns: insns,
-					fd:    int(progFd),
-				}
-			case isSkSkb:
-				b.skSkbPrograms[secName] = &SkSkbProgram{
 					Name:  secName,
 					insns: insns,
 					fd:    int(progFd),

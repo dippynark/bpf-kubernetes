@@ -31,8 +31,8 @@
 # using fork until https://github.com/iovisor/gobpf/pull/179 has merged
 [[constraint]]
   name = "github.com/iovisor/gobpf"
-  branch = "add-sock-ops-support"
   source = "github.com/dippynark/gobpf"
+  branch = "add-sock-ops-support"
 
 [prune]
   non-go = true  

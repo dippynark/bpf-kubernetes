@@ -11,7 +11,7 @@
 
 [[projects]]
   branch = "add-sock-ops-support"
-  digest = "1:e290cff8582e2ee61816b313fd4d9f1b05a9c3cd32dd14b968a4990bfe0e0c50"
+  digest = "1:dc45c3d74bc72d15fc8c58c5551ff48f38786ac6637eac069dd91731a9c13ff6"
   name = "github.com/iovisor/gobpf"
   packages = [
     "elf",
@@ -19,7 +19,7 @@
     "pkg/cpuonline",
   ]
   pruneopts = "N"
-  revision = "43012e383c0dd8ffc85e63d142ec44e8f07a2d99"
+  revision = "f1a528357c7907caa12ec3de0dafc90dfb18558a"
   source = "github.com/dippynark/gobpf"
 
 [[projects]]
@@ -67,7 +67,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:3a38255f829e03d06e35b36e547f1e9bfcd635b25e2855ff39ca650e71e6db4c"
+  digest = "1:24cf05f95f71cff3ff50bfeafbdf1d805fa56b783649fbcbeb194bf75394ae77"
   name = "golang.org/x/net"
   packages = [
     "bpf",
@@ -78,15 +78,15 @@
     "ipv6",
   ]
   pruneopts = "N"
-  revision = "eb5bcb51f2a31c7d5141d810b70815c05d9c9146"
+  revision = "4a65cf94b67935be46fbc55ddaea48ae3f7a1471"
 
 [[projects]]
   branch = "master"
-  digest = "1:04b627ba4cc9e9cd5757414e8c9cdb26fcd19018ca47e7bd1e901abc955ae182"
+  digest = "1:0d64a1536afa9cdcc414516be8c8a45d1d88db7ae9f8a60388c97565b4b4f14e"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "N"
-  revision = "97732733099d6a942a73b889770774366de963ed"
+  revision = "3fd5a3612ccd7907f26270fa92579a0f2f76f734"
 
 [solve-meta]
   analyzer-name = "dep"

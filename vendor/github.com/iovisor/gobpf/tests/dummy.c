@@ -81,13 +81,6 @@ struct bpf_map_def SEC("maps/dummy_array_custom") dummy_array_custom = {
 	.pinning = PIN_CUSTOM_NS,
 };
 
-struct bpf_map_def SEC("maps/dummy_sockmap") sock_map = {
-	.type = BPF_MAP_TYPE_SOCKMAP,
-	.key_size = sizeof(int),
-	.value_size = sizeof(unsigned int),
-	.max_entries = 128,
-};
-
 SEC("kprobe/dummy")
 int kprobe__dummy(struct pt_regs *ctx)
 {
@@ -140,16 +133,12 @@ int socket__dummy(struct __sk_buff *skb)
 	return 0;
 }
 
-SEC("sk/skb/parser/dummy_sockmap")
-int parser_dummy(struct __sk_buff *skb)
+#if KERNEL_VERSION_GTE(413)
+SEC("sockops/dummy")
+int sockops__dummy(struct bpf_sock *sk)
 {
-	return 0;
+	return 1;
 }
-
-SEC("sk/skb/verdict/dummy_sockmap")
-int verdict_dummy(struct __sk_buff *skb)
-{
-	return 0;
-}
+#endif
 
 unsigned int _version SEC("version") = 0xFFFFFFFE;
