@@ -18,14 +18,14 @@ import (
 )
 
 const (
-	assetName           = "cgroup_skb_metrics.o"
-	cgroupPath          = "/sys/fs/cgroup/unified/bpf-kubernetes"
-	programSectionName  = "cgroup/skb"
-	countMapSectionName = "maps/count"
-	mapSectionPrefix    = "maps/"
-	defaultFilePerm     = 0700
-	pingHost            = "www.google.com"
-	curlAddress         = "http://www.google.com/"
+	cgroupSkbMetricsAssetName   = "cgroup_skb_metrics.o"
+	cgroupSkbMetricsCgroupPath  = "/sys/fs/cgroup/unified/bpf-kubernetes"
+	cgroupSkbProgramSectionName = "cgroup/skb"
+	countMapSectionName         = "maps/count"
+	mapSectionPrefix            = "maps/"
+	defaultFilePerm             = 0700
+	pingHost                    = "www.google.com"
+	curlAddress                 = "http://www.google.com/"
 )
 
 func init() {
@@ -35,36 +35,36 @@ func init() {
 func CgroupSkbMetrics() error {
 
 	// load bpf
-	m, err := Load(assetName)
+	m, err := Load(cgroupSkbMetricsAssetName)
 	if err != nil {
-		log.Fatal("failed to load asset %s: %s", assetName, err)
+		log.Fatal("failed to load asset %s: %s", cgroupSkbMetricsAssetName, err)
 	}
 
 	// create cgroup
-	fileInfo, err := os.Stat(cgroupPath)
+	fileInfo, err := os.Stat(cgroupSkbMetricsCgroupPath)
 	if os.IsNotExist(err) {
-		err = os.Mkdir(cgroupPath, defaultFilePerm)
+		err = os.Mkdir(cgroupSkbMetricsCgroupPath, defaultFilePerm)
 		if err != nil {
-			log.Fatalf("failed to create cgroup %s: %s", cgroupPath, err)
+			log.Fatalf("failed to create cgroup %s: %s", cgroupSkbMetricsCgroupPath, err)
 		}
 	} else if !fileInfo.IsDir() {
-		log.Fatalf("failed to create cgroup %s: path exists but it is not a directory", cgroupPath)
+		log.Fatalf("failed to create cgroup %s: path exists but it is not a directory", cgroupSkbMetricsCgroupPath)
 	}
 
 	// add process to cgroup
-	err = cgroups.WriteCgroupProc(cgroupPath, os.Getpid())
+	err = cgroups.WriteCgroupProc(cgroupSkbMetricsCgroupPath, os.Getpid())
 	if err != nil {
-		log.Fatalf("failed to write to cgroup %s: %s", cgroupPath, err)
+		log.Fatalf("failed to write to cgroup %s: %s", cgroupSkbMetricsCgroupPath, err)
 	}
 
 	// attach program to cgroup
-	cgroupProgram := m.CgroupProgram(programSectionName)
+	cgroupProgram := m.CgroupProgram(cgroupSkbProgramSectionName)
 	if cgroupProgram == nil {
-		log.Fatalf("failed to retrieve cgroup program %s", programSectionName)
+		log.Fatalf("failed to retrieve cgroup program %s", cgroupSkbProgramSectionName)
 	}
-	err = elf.AttachCgroupProgram(cgroupProgram, cgroupPath, elf.EgressType)
+	err = elf.AttachCgroupProgram(cgroupProgram, cgroupSkbMetricsCgroupPath, elf.EgressType)
 	if err != nil {
-		log.Fatalf("failed to attach cgroup program %s to %s: %s", programSectionName, cgroupPath, err)
+		log.Fatalf("failed to attach cgroup program %s to %s: %s", cgroupSkbProgramSectionName, cgroupSkbMetricsCgroupPath, err)
 	}
 
 	// setup interrupt handler
@@ -72,9 +72,9 @@ func CgroupSkbMetrics() error {
 	signal.Notify(interruptChan, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-interruptChan
-		err := elf.DetachCgroupProgram(cgroupProgram, cgroupPath, elf.EgressType)
+		err := elf.DetachCgroupProgram(cgroupProgram, cgroupSkbMetricsCgroupPath, elf.EgressType)
 		if err != nil {
-			log.Fatalf("failed to detach cgroup program %s from %s: %s", programSectionName, cgroupPath, err)
+			log.Fatalf("failed to detach cgroup program %s from %s: %s", cgroupSkbProgramSectionName, cgroupSkbMetricsCgroupPath, err)
 		}
 		os.Exit(0)
 	}()
