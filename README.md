@@ -16,7 +16,7 @@ It's recommended to read the documentation in the same order as the following li
 [Vagrant](https://www.vagrantup.com/) can be used to spin up a virtual environment to build and load the BPF programs. The environment depends on [VirtualBox](https://www.virtualbox.org/wiki/Downloads) but other [providers](https://www.vagrantup.com/docs/providers/) exist.
 
 ```
-$ vagrant plugin install vagrant-reload
+$ vagrant plugin install vagrant-reload vagrant-disksize
 $ vagrant box list | grep ubuntu/bionic64 || vagrant box add ubuntu/bionic64
 $ vagrant up
 $ vagrant ssh
@@ -26,15 +26,12 @@ $ make run_help
 Choose from the following examples:
 cgroup_skb_metrics
 $ make run_cgroup_skb_metrics
-2019/04/13 16:40:12 packet count: 0
-2019/04/13 16:40:16 pinged www.google.com
-2019/04/13 16:40:17 packet count: 3
-2019/04/13 16:40:18 curled http://www.google.com/
-2019/04/13 16:40:20 pinged www.google.com
-2019/04/13 16:40:22 packet count: 13
-2019/04/13 16:40:22 curled http://www.google.com/
-2019/04/13 16:40:26 pinged www.google.com
-2019/04/13 16:40:27 packet count: 23
+I0524 16:12:18.585097   29216 cgroup_skb_metrics.go:247] packet count: 0
+I0524 16:12:18.586693   29216 cgroup_skb_metrics.go:155] starting controller
+I0524 16:12:18.688733   29216 cgroup_skb_metrics.go:124] attached bpf program to pod curl-b7ff57fc5-tjm42 container curl cgroup
+I0524 16:12:23.590334   29216 cgroup_skb_metrics.go:247] packet count: 2
+I0524 16:12:28.591552   29216 cgroup_skb_metrics.go:247] packet count: 15
+I0524 16:12:33.592311   29216 cgroup_skb_metrics.go:247] packet count: 28
 ^C
 ```
 

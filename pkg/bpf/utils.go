@@ -8,7 +8,7 @@ import (
 	"github.com/iovisor/gobpf/elf"
 )
 
-func Load(assetName string) (*elf.Module, error) {
+func Load(assetName string, sectionParams map[string]elf.SectionParams) (*elf.Module, error) {
 
 	buf, err := Asset(assetName)
 	if err != nil {
@@ -21,7 +21,7 @@ func Load(assetName string) (*elf.Module, error) {
 		return nil, errors.New("failed to create new module from reader")
 	}
 
-	err = m.Load(map[string]elf.SectionParams{})
+	err = m.Load(sectionParams)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load BPF programs and maps: %s", err)
 	}

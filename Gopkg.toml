@@ -24,9 +24,14 @@
 #   go-tests = true
 #   unused-packages = true
 
+#  cgroups.WriteCgroupProc
+#[[constraint]]
+#  name = "github.com/opencontainers/runc"
+#  version = "master"
+
 [[constraint]]
-  name = "github.com/opencontainers/runc"
-  branch = "master"
+  name = "k8s.io/apimachinery"
+  version = "kubernetes-1.14.0"
 
 # using fork until https://github.com/iovisor/gobpf/pull/179 has merged
 [[constraint]]

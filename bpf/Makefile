@@ -14,19 +14,18 @@ SHELL=/bin/bash -o pipefail
 
 OBJS ?= cgroup_skb_metrics.o
 
-DEST_DIR ?= /dist
-
 LINUX_HEADERS ?= /usr/src/linux-headers-$(shell uname -r)
-LINUX_INCLUDE = -I$(LINUX_HEADERS)/include \
-								-I$(LINUX_HEADERS)/arch/x86/include \
+LINUX_INCLUDE = -I$(LINUX_HEADERS)/arch/x86/include \
 								-I$(LINUX_HEADERS)/arch/x86/include/generated \
+								-I$(LINUX_HEADERS)/include \
 								-I$(LINUX_HEADERS)/include/generated/uapi \
 								-I$(LINUX_HEADERS)/arch/x86/include/uapi \
 								-I$(LINUX_HEADERS)/include/uapi
 
 CLANG ?= clang
-CLANG_FLAGS ?= -nostdinc -isystem $(shell $(CLANG) -print-file-name=include) \
-	-D__KERNEL__ -D__ASM_SYSREG_H \
+# -nostdinc: fatal error: 'asm/unistd_64.h' file not found
+CLANG_FLAGS ?= -isystem $(shell $(CLANG) -print-file-name=include) \
+	-D__BPF_TRACING__ -D__KERNEL__ -D__ASM_SYSREG_H \
 	-D__NR_CPUS__=$(shell nproc) \
 	-Wno-unused-value -Wno-pointer-sign \
 	-Wno-compare-distinct-pointer-types \
@@ -36,19 +35,19 @@ CLANG_FLAGS ?= -nostdinc -isystem $(shell $(CLANG) -print-file-name=include) \
 	$(LINUX_INCLUDE) -O2 -emit-llvm
 
 LLC ?= llc
-LLC_FLAGS ?= -march=bpf -filetype=obj
+LLC_FLAGS ?= -march=bpf -filetype=obj -relocation-model=ropi
 
 GO_BINDATA ?= go-bindata
-GO_BINDATA_FLAGS ?= -pkg bpf -prefix "$(DEST_DIR)/" -modtime 1
+GO_BINDATA_FLAGS ?= -pkg bpf -modtime 1
 
 all: $(OBJS)
 
 bindata.go: $(OBJS)
-	$(GO_BINDATA) $(GO_BINDATA_FLAGS) -o "$(DEST_DIR)/bindata.go" $(addprefix "$(DEST_DIR)/",$(OBJS))
+	$(GO_BINDATA) $(GO_BINDATA_FLAGS) -o bindata.go $(OBJS)
 
-%.o: %.c
-	mkdir -p "$(DEST_DIR)"
-	$(CLANG) $(CLANG_FLAGS) -c $< -o - | $(LLC) $(LLC_FLAGS) -o "$(DEST_DIR)/$@"
+.DELETE_ON_ERROR:
+%.o: %.c include/%.h
+	$(CLANG) $(CLANG_FLAGS) -c $< -o - | $(LLC) $(LLC_FLAGS) -o "$@"
 
 clean:
 	rm -f $(OBJS) bindata.go

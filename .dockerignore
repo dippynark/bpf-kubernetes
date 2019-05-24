@@ -5,3 +5,6 @@
 !/cmd/**
 !/pkg/**
 !/vendor/**
+
+# allow bpf includes
+!/bpf/include/**
