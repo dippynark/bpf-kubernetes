@@ -8,6 +8,7 @@ BPF_BUILDER_DOCKERFILE ?= bpf/Dockerfile
 BPF_BUILDER_IMAGE ?= bpf-builder
 
 CGROUP2 = /sys/fs/cgroup/unified
+DEBUGFS = /sys/kernel/debug
 
 # If you can use docker without being root, you can do "make SUDO="
 SUDO=$(shell docker info >/dev/null 2>&1 || echo "sudo -E")
@@ -17,9 +18,11 @@ run_%:
 		--privileged \
 		--pid=host \
 		--net=host \
-		--ipc=host \
-		--uts=host \
+		-e NODE_NAME=$(shell hostname) \
+		-e KUBECONFIG=$(KUBECONFIG) \
+		-v $(KUBECONFIG):$(KUBECONFIG) \
 		-v $(CGROUP2):$(CGROUP2) \
+		-v $(DEBUGFS):$(DEBUGFS) \
 		${REGISTRY}/${IMAGE}:${TAG} \
 		--example $*
 
@@ -38,10 +41,9 @@ bpf: docker_build_bpf
 
 docker_build_bpf: docker_build_bpf_image
 	$(SUDO) docker run --rm \
-		-v $(CURDIR):/src:ro \
-		-v $(CURDIR)/bpf:/dist/ \
+		-v $(CURDIR)/bpf:/bpf \
 		-v /usr/src:/usr/src \
-		--workdir=/src/bpf \
+		--workdir=/bpf \
 		$(REGISTRY)/$(BPF_BUILDER_IMAGE) \
 		make bindata.go
 
